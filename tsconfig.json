@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "./tmp/",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "jsx": "preserve",
+    "module": "es6",
+    "target": "es5"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
