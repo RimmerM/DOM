@@ -1,0 +1,18 @@
+{
+  "name": "dom",
+  "version": "0.0.1",
+  "description": "Virtual DOM",
+  "main": "bin/dom.js",
+  "module": "bin/dom-es6.js",
+  "scripts": {
+    "watch": "tsc --watch",
+    "build": "tsc && rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rimmer",
+  "devDependencies": {
+    "rollup": "^0.41.6",
+    "rollup-plugin-replace": "^1.1.1",
+    "typescript": "^2.2.2"
+  }
+}
