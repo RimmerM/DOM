@@ -1,17 +1,18 @@
 import { isString, mapObject } from "./util";
 
 export const enum NodeFlag {
-  Text  = 1,
-  Html  = 2,
-  Fun   = 4,
-  Class = 8,
+  Text     = 1,
+  Html     = 2,
+  Fun      = 4,
+  Class    = 8,
+  Template = 16,
 
-  Svg      = 16,
-  Input    = 32,
-  TextArea = 64,
+  KeyedChildren   = 32,
+  UnkeyedChildren = 64,
 
-  KeyedChildren   = 128,
-  UnkeyedChildren = 256,
+  Svg      = 128,
+  Input    = 256,
+  TextArea = 512,
 
   TypeMask = Text | Html | Fun | Class,
 }
@@ -95,6 +96,10 @@ export function newNode<P>(
   key?: Key | null,
   ref?: Ref | null
 ): VNode {
+  if(!(flags & NodeFlag.TypeMask)) {
+    flags |= ((type as any).prototype && (type as any).prototype.render) ? NodeFlag.Class : NodeFlag.Fun;
+  }
+
   return {
     mount: null,
     flags: flags,
