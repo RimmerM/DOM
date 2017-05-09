@@ -17,7 +17,8 @@ export const enum NodeFlag {
   TypeMask = Text | Html | Fun | Class,
 }
 
-export type NodeChildren = VNode | VNode[];
+export type NodeChild = VNode | string;
+export type NodeChildren = NodeChild | NodeChild[];
 export type Ref = (node: Node | null) => void;
 export type Fun = (props: any) => VNode;
 export type Key = string | number;

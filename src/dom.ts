@@ -1,5 +1,5 @@
 import { 
-  VNode, NodeFlag, NodeChildren, Fun, Con, ClassNames, Component, 
+  VNode, NodeFlag, NodeChild, NodeChildren, Fun, Con, ClassNames, Component, 
   newTextNode 
 } from "./node";
 
@@ -105,16 +105,20 @@ function mountHtml(
 
   // Instantiate the node children.
   if(isArray(children)) {
-    console.log("array", children);
-    mountArray(children as VNode[], element, isSVG);
-  } else if(children) {
-    const child = children as VNode;
+    for(let i = 0; i < (children as NodeChild[]).length; i++) {
+      let child = (children as NodeChild[])[i];
+      if(!isNode(child)) child = newTextNode(child);
 
+      mount(child as VNode, element, isSVG);
+    }
+  } else if(children) {
     // As an optimization, we directly set the element textContent if there is a single text child.
-    if(child.flags & NodeFlag.Text) {
-      element.textContent = child.type as string;
+    if(!isNode(children)) {
+      element.textContent = children as string;
+    } else if((children as VNode).flags & NodeFlag.Text) {
+      element.textContent = (children as VNode).type as string;
     } else {
-      mount(child, element, isSVG);
+      mount(children as VNode, element, isSVG);
     }
   }
 
@@ -134,9 +138,14 @@ function mountHtml(
   return element;
 }
 
-function mountArray(children: VNode[], element: Node, isSVG: boolean) {
-  for(let i = 0; i < children.length; i++) {
-    mount(children[i], element, isSVG);
+function mountChild(child: VNode | string, element: Node, isSVG: boolean) {
+  // As an optimization, we directly set the element textContent if there is a single text child.
+  if(isString(child)) {
+    element.textContent = child as string;
+  } else if((child as VNode).flags & NodeFlag.Text) {
+    element.textContent = (child as VNode).type as string;
+  } else {
+    mount(child as VNode, element, isSVG);
   }
 }
 
