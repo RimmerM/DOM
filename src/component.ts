@@ -1,5 +1,6 @@
 import { Component as IComponent, VNode, BaseProps } from "./node";
 import { shallowEquals, mapObject, assignObject } from "./util";
+import { updateComponent } from "./dom";
 
 export class Component<P, S> implements IComponent<P, S> {
   state?: S;
@@ -50,8 +51,6 @@ function update<P, S>(component: Component<P, S>, newProps: P & BaseProps, newSt
   }
 }
 
-function patch() {}
-
 function applyState<P, S>(component: Component<P, S>, newState: S, force: boolean) {
   const props = component.props;
   const oldState = component.state;
@@ -63,8 +62,6 @@ function applyState<P, S>(component: Component<P, S>, newState: S, force: boolea
     });
   }
 
-  if(update(component, props, newState, force)) {
-    const node = component.render(props, newState);
-    patch();
-  }
+  const node = update(component, props, newState, force);
+  if(node != null) updateComponent(component, node);
 }
