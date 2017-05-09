@@ -10,7 +10,7 @@ export default {
   entry: "./tmp/index.js",
   targets: [
     { dest: "./bin/dom-es6.js", format: "es" },
-    { dest: "./bin/dom.js", format: "iife", moduleName: "dom" },
+    { dest: "./bin/dom.js", format: "cjs" },
   ],
   plugins: plugins
 }

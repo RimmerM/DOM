@@ -96,10 +96,6 @@ export function newNode<P>(
   key?: Key | null,
   ref?: Ref | null
 ): VNode {
-  if(!(flags & NodeFlag.TypeMask)) {
-    flags |= ((type as any).prototype && (type as any).prototype.render) ? NodeFlag.Class : NodeFlag.Fun;
-  }
-
   return {
     mount: null,
     flags: flags,
@@ -111,6 +107,32 @@ export function newNode<P>(
     parent: null,
     children: children || [],
   };
+}
+
+export function newComponent<P>(
+  type: Fun | Con,
+  props: P,
+  children?: NodeChildren | null,
+  flags?: NodeFlag,
+  className?: ClassNames | null,
+  key?: Key | null,
+  ref?: Ref | null
+): VNode {
+  const isComponent = (type as any).prototype && (type as any).prototype.render;
+  flags = (flags || 0) | (isComponent ? NodeFlag.Class : NodeFlag.Fun);
+  return newNode(flags, type, props, className, children, key, ref);
+}
+
+export function newHtml<P>(
+  type: string,
+  children?: NodeChildren,
+  className?: ClassNames | null,
+  flags?: NodeFlag,
+  props?: P,
+  key?: Key | null,
+  ref?: Ref | null
+): VNode {
+  return newNode((flags || 0) | NodeFlag.Html, type, props, className, children, key, ref);
 }
 
 export function newTextNode(text: any, key?: Key): VNode {
